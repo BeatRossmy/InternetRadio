@@ -27,6 +27,7 @@
 #define ENC_IN2       18
 #define ENC_BTN       5
 
+// 
 String stations[] = {
   "http://streams.br.de/bayern1_2.m3u",     // br 1
   "http://streams.br.de/b5aktuell_2.m3u",   // br 24 aktuell
@@ -42,15 +43,6 @@ WiFiMulti wifiMulti;
 Adafruit_NeoPixel pixels(16, NEO_PIN);
 Button button = {ENC_BTN,false};
 RotaryEncoder encoder(ENC_IN1, ENC_IN2, RotaryEncoder::LatchMode::FOUR3);
-
-/*String ssid [] =     {
-  "o2-WLAN0 4",
-  "FermentationStatio n",
-};
-String password [] = {
-  "7599915630993937",
-  "Lactobacillus",
-};*/
 
 int volume = 17; // 0-21
 int station = 0; // 0-6
@@ -80,41 +72,17 @@ void setup() {
   pixels.setPixelColor(0, pixels.Color(50,0,0));
   pixels.show();
 
-  /*
-  // WIFI AUTO CONNECT TO ONE OF THE STORED WIFIS
-  WiFi.mode(WIFI_STA);
-  if (DEBUG) Serial.println(WiFi.status());
-  // go through all wifis
-  if (DEBUG) Serial.println("test connections ...");
-  for (int i=0; i<2; i++) {
-    wifiMulti.addAP(ssid[i].c_str(), password[i].c_str());
-    if (DEBUG) Serial.println(i);
-    // if connected break connection process
-    if(WiFi.status() == WL_CONNECTED){
-      if (DEBUG) Serial.print("connected to ");
-      if (DEBUG) Serial.println(ssid[i].c_str());
-      break;
-    }
-  }
-  if (WiFi.status() != WL_CONNECTED){
-    WiFi.disconnect(true);
-    wifiMulti.run();
-  }
-  */
-
   // WIFI CONNECT AND REPEAT
   WiFi.mode(WIFI_STA);
-  wifiMulti.addAP("o2-WLAN04","7599915630993937");
-  wifiMulti.addAP("FermentationStation","Lactobacillus");
-  wifiMulti.addAP("FRITZ!Box 7583 PN","36256838805913385764");
+  wifiMulti.addAP("wifi_name","password");
+  wifiMulti.addAP("wifi_name","password");
+  wifiMulti.addAP("wifi_name","password");
   try_connection();
 
   // AUDIO SETUP
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
   audio.setVolume(volume);
   audio.connecttohost(stations[station].c_str());
-
-  
 
   // DEFINE THREAD FOR SECOND CORE
   xTaskCreatePinnedToCore(
